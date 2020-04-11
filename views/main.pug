@@ -1,0 +1,11 @@
+extends layout
+
+block main
+
+    form.container(action="." method="POST")
+        div.row.input-group.m-5.shadow-n.rounded-pill.fade-in.w-auto.clr-wht
+            input.form-control.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search")
+            div.input-group-append
+                button.btn.btn-default.border-0.rounded-pill(type="submit")
+                    i.fas.fa-search.zoom.onclick
+
