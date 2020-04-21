@@ -1,11 +1,29 @@
 extends layout
 
-block main
+block append head
 
-    form.container(action="." method="POST")
-        div.row.input-group.m-5.shadow-n.rounded-pill.fade-in.w-auto.clr-wht
-            input.form-control.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search")
-            div.input-group-append
-                button.btn.btn-default.border-0.rounded-pill(type="submit")
-                    i.fas.fa-search.zoom.onclick
+    script(type="text/javascript" src="/js/script.js")
 
+block background
+
+    .row.h-100
+        .col.align-self-center
+            p Price &ensp;
+                i.fas.fa-tags
+            p Dropped  
+
+block search_bar
+
+    .row.justify-content-center
+        form.row.needs-validation.m-5.w-75.justify-content-center(action="." method="POST" novalidate)
+            .row.input-group.shadow-n.rounded-pill.fade-in.clr-wht
+                input#query.form-control.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search" required)
+                .input-group-append
+                    button.btn.btn-default.border-0.rounded-pill(type="submit")
+                        i.fas.fa-search.zoom.onclick
+            .invalid-feedback You need to provide a product name here.   
+
+block search_result 
+
+    //- .row.justify-content-center.h-75.fade-in
+    //-     .col-10.background.m-5
