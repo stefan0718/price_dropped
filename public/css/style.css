@@ -1,12 +1,15 @@
 body { 
     height: 100vh;
-    background-color: #fff8e1; /*#e8f5e9*/
+    background-color: #e0e0e0; /*#e8f5e9*/
 }
 
 .background {
     height: 100vh;
     position: absolute;
     font-size: 8vw;
+    color: #424242;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 600;
     line-height: 0.8;
 }
 
