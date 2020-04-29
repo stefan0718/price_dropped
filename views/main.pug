@@ -15,8 +15,8 @@ block background
 block search_bar
 
     .row.justify-content-center
-        form.container.needs-validation.m-5.w-75.justify-content-center(action="." method="POST" novalidate)
-            #searchBar.row.input-group.shadow-n.rounded-pill.clr-wht(style="display: none")
+        form.container.needs-validation.mt-5.ml-3.mr-3.mb-2.p-0.justify-content-center(action="." method="POST" novalidate)
+            #searchBar.row.input-group.shadow-n.rounded-pill.clr-wht.m-0(style="display: none")
                 input#query.form-control.form-control-lg.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search" required)
                 .input-group-append
                     button.btn.btn-default.border-0.rounded-pill(type="submit")
@@ -25,6 +25,10 @@ block search_bar
                 .invalid-feedback(style="visibility: visible") You need to provide a product name here.
     .d-flex.justify-content-center
         .loading(style="display: none")
+
+block shopping_list
+
+    #shopping-list.row.mb-3.ml-1
 
 block search_result
 
