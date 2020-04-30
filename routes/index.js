@@ -36,7 +36,6 @@ router.post('/', (req, res) => {
     //         const itemMain = document.querySelectorAll('header.product-header');
     //         itemMain.forEach((item, i) => {
     //             results['fromColes'].push({
-    //                 "itemIndex": i,
     //                 "itemSKU": item.querySelector('h3.product-title').getAttribute('data-partnumber'),
     //                 "itemImage": item.querySelector('a.product-image-link img').getAttribute('src'),
     //                 "itemBrand": item.querySelector('span.product-brand').innerText,

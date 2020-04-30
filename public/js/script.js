@@ -21,23 +21,22 @@ function postData() {
             var urlColes = "https://shop.coles.com.au";
             var listWoolworths = $('#listWoolworths');
             console.log(data);
-            createList(data.fromColes, listColes, urlColes, input.value.trim());
+            createList(data.fromColes, listColes, urlColes);
         });
     }
 }
 
 // create search result
-function createList(data, listgroup, url, itemId) {
+function createList(data, listgroup, url) {
     switch (data.length) {
         case 0:
             break;
         default:
-            itemId = itemId.replace(/\s/g, '-');
             var listItem = listgroup.children().clone();
             var delayTime = 500;
             listgroup.fadeIn();
             for (var i = 0; i < data.length; i++) {
-                listItem.attr('id', itemId + '-' + i);
+                listItem.addClass('activeListItem');
                 listItem.find('img').attr({
                     'src': url + data[i].itemImage,
                     'alt': data[i].itemBrand + ' ' + data[i].itemName
@@ -58,44 +57,66 @@ function createList(data, listgroup, url, itemId) {
                 listItem.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent * 100).toFixed(0));
                 listgroup.append(listItem.clone().delay(delayTime += 100).fadeTo(400, 1));
             }
-            addToShoppingList(listgroup);
+            addToShoppingList(listgroup, data);
             return listgroup;
     }
 }
 
-// save user-chosen items data and return json
-function chosenItems(data, from) {
-    var existingData = sessionStorage.getItem(from);
-    sessionStorage.setItem(from, (existingData === null) ? data : existingData + ',' + data);
+// store user-chosen items data and return json
+function storeChosenItems(data, from) {
+    if (storedData.hasOwnProperty(data.itemSKU)) storedData[data.itemSKU].qty++;
+    else {
+        storedData[data.itemSKU] = data;
+        storedData[data.itemSKU].qty = 1;
+        storedData[data.itemSKU].vendorCode = from;
+        storedData[data.itemSKU].order = Object.keys(storedData).length++;
+    }
+    return storedData[data.itemSKU];
 }
 
 // create shopping list with animation
-function addToShoppingList(listgroup) {
+function addToShoppingList(listgroup, data) {
     listgroup.on('click', 'a.list-group-item', (e) => {
-        var shoppingList = $('#shopping-list');
-        var container = $('<div></div>').addClass('shadow-n rounded-circle border-0 m-1 item-container');
         var chosenItem = $(e.currentTarget).find('img').clone().removeClass('border-0').addClass('rounded-circle chosen-item');
-        if (listgroup.attr('id') === 'listColes') chosenItem.css('box-shadow', 'inset 0 0 0 2vmax #de1f27');
-        else chosenItem.css('box-shadow', 'inset 0 0 0 2vmax #178841');
-        var animated = chosenItem.clone().offset({
-            top: $(e.currentTarget).find('img').offset().top,
-            left: $(e.currentTarget).find('img').offset().left
-        }).css({
-            'opacity': '0.8',
-            'position': 'absolute',
-            'z-index': '100',
-            'display': 'block'
-        });
-        //if ()
-        shoppingList.append(container.append(chosenItem));
-        animated.appendTo(container).animate({
-            'top': container.offset().top,
-            'left': container.offset().left,
-            'opacity': 0
-        }, 1000, 'swing');
-        chosenItem.delay(1000).fadeIn();
-        container.animate({ 'height': '7vmax'}, 1000);
+        var chosenData = data[$('.activeListItem').index($(e.currentTarget))];
+        var vendorCode = '';
+        if (listgroup.attr('id') === 'listColes') {
+            chosenItem.css('box-shadow', 'inset 0 0 0 2vmax #de1f27');
+            vendorCode = 'co'; // Coles
+        }
+        else {
+            chosenItem.css('box-shadow', 'inset 0 0 0 2vmax #178841');
+            vendorCode = 'ww'; // Woolworths
+        }
+        var latestAdded = storeChosenItems(chosenData, vendorCode);
+        addToShoppingListAnimation(chosenItem, e.currentTarget, latestAdded);
     });
+}
+
+function addToShoppingListAnimation (chosenItem, parentList, latestAdded) {
+    var shoppingList = $('#shopping-list');
+    var container = $('<div></div>').addClass('shadow-n rounded-circle border-0 m-1 item-container').attr('id', 'container-' + latestAdded.order);
+    var animated = chosenItem.clone().offset({
+        top: $(parentList).find('img').offset().top,
+        left: $(parentList).find('img').offset().left
+    }).css({
+        'opacity': '0.8',
+        'position': 'absolute',
+        'z-index': '100',
+        'display': 'block'
+    });
+    if (latestAdded.qty <= 1) {
+        shoppingList.append(container.append(chosenItem));
+        container.animate({ 'height': '7vmax'}, 1000);
+    }
+    var latestContainer = shoppingList.find('#container-' + latestAdded.order);
+    console.log(latestAdded.order);
+    animated.appendTo(latestContainer).animate({
+        'top': latestContainer.offset().top,
+        'left': latestContainer.offset().left,
+        'opacity': 0
+    }, 1000, 'swing');
+    chosenItem.delay(1000).fadeIn();
 }
 
 window.addEventListener('load', () => {
@@ -108,3 +129,6 @@ window.addEventListener('load', () => {
         postData();
     }, false);
 }, false);
+
+// store all user chosen data here
+var storedData = {};
