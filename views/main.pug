@@ -23,17 +23,20 @@ block search_bar
                         i.fas.fa-search.zoom.onclick
             .row(style="visibility: hidden; height: 3vh")
                 .invalid-feedback(style="visibility: visible") You need to provide a product name here.
-    .d-flex.justify-content-center
-        .loading(style="display: none")
 
 block shopping_list
 
     #shopping-list.row.mb-3.ml-1
 
+block loading_spinner
+
+    .d-flex.justify-content-center
+        .loading(style="display: none")
+
 block search_result
 
     .row
-        #listColes.col.list-group(style="display: none")
+        #listColes.col.list-group.ml-4(style="display: none")
             include item
-        #listWoolworths.col.list-group
+        #listWoolies.col.list-group.mr-4
             include item
