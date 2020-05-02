@@ -18,6 +18,7 @@ window.addEventListener('load', () => {
             $('.loading').fadeIn();
             $('a.list-group-item').remove('.activeListItem');
             fetchFromColes();
+            fetchFromWoolies();
         }
     }, false);
 }, false);
@@ -41,7 +42,40 @@ function fetchFromColes() {
 
 // Woolies provides API so data can be fetched from clientside
 function fetchFromWoolies() {
-    var urlWoolies = 'https://www.woolworths.com.au/shop/search/products?searchTerm=';
+    var urlWoolies = 'https://www.woolworths.com.au/apis/ui/v2/Search/products?searchterm=';
+    $.ajax({
+        type: 'GET',
+        url: urlWoolies + $('#query')[0].value.trim(),
+    }).done((data) => {
+        $('.loading').fadeOut();
+        //console.log(data.Products);
+        var fromWoolies = [];
+        data.Products.forEach((item, i) => {
+            item = item.Products[0];
+            var itemPromoQty = 0;
+            var itemPromoPrice = 0;
+            if (item.CentreTag.TagContent !== null){
+                if ($(item.CentreTag.TagContent).attr('title') !== undefined) {
+                    itemPromoQty = parseInt($(item.CentreTag.TagContent).attr('title').charAt(0));
+                    itemPromoPrice = parseFloat($(item.CentreTag.TagContent).attr('title').split(' ').pop());
+                }
+            }
+            fromWoolies.push({
+                "itemSKU": item.Stockcode,
+                "itemImage": item.LargeImageFile,
+                "itemBrand": item.Brand.charAt(0).toUpperCase() + item.Brand.slice(1),
+                "itemName": item.Name.slice(item.Brand.length).trim(),
+                "itemDollar": Math.floor(item.Price),
+                "itemCent": (item.Price % 1).toFixed(2),
+                "itemSize": item.PackageSize,
+                "itemPackagePrice": item.CupString,
+                "itemPromoQty": itemPromoQty,
+                "itemPromoPrice": itemPromoPrice,
+                "itemSaving": item.WasPrice - item.Price
+            });
+        });
+        console.log(fromWoolies);
+    });
 }
 
 // create search result
