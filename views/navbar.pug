@@ -1,0 +1,20 @@
+.fixed-top
+    nav.navbar.navbar-dark.navbar-expand-md.bg-secondary.shadow-m
+        button.navbar-toggler.border-0(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+            i.fas.fa-hamburger
+        a.navbar-brand.h1.mb-0.m-auto(href="#") Price Dropped
+        button.navbar-toggler.border-0(type="button" data-toggle="collapse" data-target="#navSearch" aria-controls="navSearch" aria-expanded="false" aria-label="Toggle navigation")
+            i.fas.fa-search
+        #navbarNav.collapse.navbar-collapse.ml-2
+            .navbar-nav
+                a.nav-item.nav-link(href="#") Home
+                a.nav-item.nav-link(href="#") Others
+        form#navSearch.form-inline.collapse.navbar-collapse.needs-validation(action="." method="POST" novalidate)
+            .input-group.bg-white.rounded-pill.ml-auto.w-100
+                input#query.form-control.border-0.rounded-pill(type="search" name="query" placeholder="Search for a product" aria-label="Search" required)
+                .input-group-append
+                    button.btn.border-0.rounded-pill(type="submit")
+                        i.fas.fa-search
+    .progress.rounded-0.invisible(style="height: 5px")
+        .progress-bar(role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100")
+    .invalid-feedback.text-right.pr-4.mt-0(style="visibility: visible") You need to provide a product name here.

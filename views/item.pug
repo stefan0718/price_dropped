@@ -1,19 +1,35 @@
-a.list-group-item.m-2.shadow-n.border-0.rounded.listzoom.gradient.onclick(style="display: none")
-    .row
-        .col.col-auto.mt-2.mb-2
-            img.img-thumbnail.border-0
-        .col.mt-2.mb-2
-            p#item-name-size
-            p
-                small
-            h5#item-saving
-                mark.p-0
-                    b#item-saving
-            h5#item-promo
-                mark.p-0
-                    b#item-promo
-        .col.col-auto.align-self-center.mt-2.mb-2
-            span#currency(style="font-size: 3rem") $
-            span
-                b#dollar(style="font-size: 4rem")
-            span#cent(style="font-size: 2rem")
+//- a.list-group-item.m-2.shadow-n.border-0.rounded.p-0.listzoom.click-effect(style="display: none")
+//-     #list-item.d-flex.justify-content-between.rounded
+//-         .m-2
+//-             img.img-thumbnail.border-0.img-fit.p-1
+//-         .m-2
+//-             p#item-name-size
+//-             p
+//-                 small
+//-             h5#item-saving
+//-                 mark.p-0
+//-                     b#item-saving
+//-             h5#item-promo
+//-                 mark.p-0
+//-                     b#item-promo
+//-         .d-flex.flex-column.justify-content-center
+//-             .m-2
+//-                 span#currency(style="font-size: 1rem") $
+//-                 span
+//-                     b#dollar(style="font-size: 2rem")
+//-                 span#cent(style="font-size: 1rem")
+
+.card.border-0.shadow-m.click-effect.mb-2.border-left(style="display: none")
+    #list-item.row.no-gutters.flex-md-nowrap
+        .col-md-5.col-lg-4.col-xl-3.d-flex.align-items-center
+            img.rounded.img-fluid.w-100
+        .col-md-7.card-body.p-2.pl-md-1.pt-md-3.pb-md-3.d-flex.flex-column.justify-content-around
+            .card-title.d-flex
+                p#currency.mb-0(style="font-size: 1.2em") $
+                p#dollar.mb-0(style="font-size: 1.2em")
+                p#cent.mb-0.align-self-end(style="font-size: .8em; line-height: 2em")
+                p.align-self-end.mb-0.ml-auto.mx-md-3(style="font-size: .8em; line-height: 2em")
+            p#packagePrice.card-subtitle.mb-1(style="font-size: .8em; line-height: 2em")
+            #auto-scroll
+                p#itemDesc.card-text(style="font-size: .9em")
+            

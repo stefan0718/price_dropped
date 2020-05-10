@@ -1,12 +1,18 @@
-body { 
-    height: 100vh;
-    background-color: #fff;
+body {
+    padding-top: 100px;
     font-weight: 500;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
+.img-fit {
+    height: 9vmax;
+    width: 9vmax;
+    object-fit: contain;
+}
+
 .background {
     height: 100vh;
+    width: 100vw;
     position: absolute;
     font-size: 10vmax;
     color: #424242;
@@ -25,13 +31,12 @@ body {
     margin-top: -1vmax;
 }
 
-.gradient {
+.gradient-coles {
     background: linear-gradient(to right, #de1f27, #ffffff);
 }
 
-span#currency, #dollar, #cent {
-    vertical-align: top;
-    line-height: 0.6
+.gradient-ww {
+    background: linear-gradient(to right, #ffffff, #178841);
 }
 
 .chosen-item {
@@ -45,34 +50,48 @@ span#currency, #dollar, #cent {
 .item-container {
     visibility: hidden;
     width: 7vmax;
-    height: 0;
+    height: 7vmax;
 }
 
-.clr-wht { background-color: #fff; }
+span.badge {
+    display: none;
+    visibility: visible;
+    position: absolute; 
+}
 
-.zoom, .listzoom { transition: 0.2s; }
+.no-wrap {
+    overflow-x: auto;
+    white-space: nowrap;
+}
 
-.zoom:hover { transform: scale(1.3); }
+.click-effect { transition: 0.2s; }
 
-.listzoom:hover { transform: scale(1.05); }
+.click-effect:active { transform: scale(0.98); }
 
-.onclick:active { transform: scale(1.0); }
+button:focus { outline: none; }
 
-.shadow-n {
+.btn:focus, .form-control:focus { box-shadow: none }
+
+/* .shadow-n {
     box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+} */
+
+.shadow-m {
+    box-shadow: 0 1px 1px 0 rgba(60,75,100,.14), 0 2px 1px -1px rgba(60,75,100,.12), 0 1px 3px 0 rgba(60,75,100,.2)
 }
 
-.btn:focus, .form-control:focus { 
-    box-shadow: none
+.border-left {
+    border-left: 3px solid #de1f27!important
 }
 
-.loading {
+/* .loading {
     border: 2vmax solid #3a3a3a;
     border-top: 2vmax solid #3a3a3a00;
     border-radius: 50%;
     width: 20vmax;
     height: 20vmax;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
+    -webkit-animation: loading-animation 1s linear infinite;
+    -moz-animation: loading-animation 1s linear infinite;
     animation: loading-animation 1s linear infinite
 }
 
@@ -81,8 +100,12 @@ span#currency, #dollar, #cent {
     100% { transform: rotate(360deg) }
 }
 
-/* Safari */
 @-webkit-keyframes loading-animation {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
 }
+
+@-moz-keyframes loading-animation {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+} */

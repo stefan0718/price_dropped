@@ -6,37 +6,48 @@ block append head
 
 block background
 
-    #background.row(style="display: none")
-        #logo.col.align-self-center
+    #background.d-flex.justify-content-center.background.align-items-center.fixed-top(style="display: none")
+        .flex-column
             p.text-gradient Price&ensp;
                 i.fas.fa-tags
             p.text-gradient Dropped
 
-block search_bar
+//- block search_bar
 
-    .row.justify-content-center
-        form.container.needs-validation.mt-5.ml-3.mr-3.mb-2.p-0.justify-content-center(action="." method="POST" novalidate)
-            #searchBar.row.input-group.shadow-n.rounded-pill.clr-wht.m-0(style="display: none")
-                input#query.form-control.form-control-lg.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search" required)
-                .input-group-append
-                    button.btn.btn-default.border-0.rounded-pill(type="submit")
-                        i.fas.fa-search.zoom.onclick
-            .row(style="visibility: hidden; height: 3vh")
-                .invalid-feedback(style="visibility: visible") You need to provide a product name here.
+//-     .row.justify-content-center
+//-         form.container.needs-validation.mt-5.ml-3.mr-3.mb-2.p-0.justify-content-center(action="." method="POST" novalidate)
+//-             #searchBar.row.input-group.shadow-n.rounded-pill.clr-wht.m-0(style="display: none")
+//-                 input#query.form-control.form-control-lg.border-0.rounded-pill(type="text" name="query" placeholder="Search for a product here" aria-label="Search" required)
+//-                 .input-group-append
+//-                     button.btn.btn-default.border-0.rounded-pill(type="submit")
+//-                         i.fas.fa-search.zoom.onclick
+//-             .row(style="visibility: hidden; height: 3vh")
+//-                 .invalid-feedback(style="visibility: visible") You need to provide a product name here.
 
-block shopping_list
+//- block shopping_list
 
-    #shopping-list.row.mb-3.ml-1
+//-     .row.mb-3.ml-1(style="height: 10vmax")
+//-         #shopping-list.pl-4.w-75.no-wrap
+//-             span.rounded-circle.border-0.m-1.item-container
+//-                 span#item-qty.badge.badge-pill.badge-primary           
+//-         //- #shopping-summary.w-25
+//-         //-     i.fas.fa-cart-plus.zoom.onclick.m-auto(style="font-size: 5vmax")
 
-block loading_spinner
+//- block loading_spinner
 
-    .d-flex.justify-content-center
-        .loading(style="display: none")
+//-     .d-flex.justify-content-center
+//-         .loading(style="display: none")
 
 block search_result
 
-    .row
-        #listColes.col.list-group.ml-4(style="display: none")
+    //- #search-result
+    //-     #listColes.list-group.pr-1(style="display: none")
+    //-         include item
+    //-     #listWoolies.list-group.pl-1(style="display: none")
+    //-         include item
+
+    .row.no-gutters.p-2.p-md-5
+        #listColes.col-6.pr-1.pr-md-2
             include item
-        #listWoolies.col.list-group.mr-4
+        #listWoolies.col-6.pl-1.pl-md-2
             include item
