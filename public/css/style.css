@@ -1,13 +1,28 @@
 body {
-    padding-top: 100px;
-    font-weight: 500;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+    font-family: Jost;
 }
 
-.img-fit {
-    height: 9vmax;
-    width: 9vmax;
-    object-fit: contain;
+@font-face {
+    font-family: Jost;
+    src: url('/font/Jost-Medium.ttf')
+}
+
+@font-face {
+    font-family: ReachTheEnd;
+    src: url('/font/Reach the End.otf')
+}
+
+.sm-font {
+    font-size: .8em;
+    line-height: 2em
+}
+
+.nm-font { font-size: 0.9em }
+
+.lg-font { font-size: 1.2em }
+
+.logo {
+    font-family: ReachTheEnd;
 }
 
 .background {
@@ -19,7 +34,7 @@ body {
     font-weight: 600;
     line-height: 1.1;
     z-index: -1;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family: ReachTheEnd;
 }
 
 .text-gradient {
@@ -28,7 +43,6 @@ body {
     -webkit-background-clip: text;
     color: rgba(0,0,0,0);
     margin-bottom: 0;
-    margin-top: -1vmax;
 }
 
 .gradient-coles {
@@ -59,11 +73,6 @@ span.badge {
     position: absolute; 
 }
 
-.no-wrap {
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
 .click-effect { transition: 0.2s; }
 
 .click-effect:active { transform: scale(0.98); }
@@ -78,10 +87,6 @@ button:focus { outline: none; }
 
 .shadow-m {
     box-shadow: 0 1px 1px 0 rgba(60,75,100,.14), 0 2px 1px -1px rgba(60,75,100,.12), 0 1px 3px 0 rgba(60,75,100,.2)
-}
-
-.border-left {
-    border-left: 3px solid #de1f27!important
 }
 
 /* .loading {

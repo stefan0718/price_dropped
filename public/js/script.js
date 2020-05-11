@@ -9,20 +9,8 @@ function progressbarLoading() {
         }
 }
 
-function borderResponsive() {
-    if ($(window).width() >= 768) {
-
-    }
-}
-
 window.addEventListener('load', () => {
-    $('#background').fadeIn();
-    // if ($(window).width() <= 1024 && $(window).width() < $(window).height())
-    //     $('a.list-group-item').css('width', '100vw');
-    // else {
-    //     $('a.list-group-item').css('width', '45vw');
-    //     $('#search-result').addClass('justify-content-center');
-    // }
+    $('body').css('padding-top', $('#navBar').height());
     var form = document.querySelector('.needs-validation');
     form.addEventListener('submit', e => {
         e.preventDefault();
@@ -36,9 +24,8 @@ window.addEventListener('load', () => {
         else {
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
-            $('#background').animate( {opacity: 0.3} );
-            $('a.list-group-item').remove('.active_listColes');
-            $('a.list-group-item').remove('.active_listWoolies');
+            $('a.list-group-item').remove('#active_listColes');
+            $('a.list-group-item').remove('#active_listWoolies');
             fetchFromColes();
             fetchFromWoolies();
         }
@@ -108,23 +95,28 @@ function createList(data, cards, url) {
             break;
         default:
             var card = cards.children().clone();
-            // if (cards.attr('id') === 'listColes') card.find('#list-item').addClass('gradient-coles');
-            // else card.find('#list-item').addClass('gradient-ww flex-row-reverse');
             var delayTime = 500;
             cards.fadeIn();
             for (let i = 0; i < data.length; i++) {
-                card.addClass('active_' + cards.attr('id'));
+                card.attr('id', 'active_' + cards.attr('id'));
                 card.find('img').attr({
                     'src': url + data[i].itemImage,
                     'alt': data[i].itemBrand + ' ' + data[i].itemName
                 });
+                if (card.attr('id') === "active_listWoolies") card.find('img').css('padding', '0.5rem');
                 card.find('#itemDesc').text(data[i].itemBrand + ' ' + data[i].itemName + ' ' + data[i].itemSize);
                 card.find('#packagePrice').text(data[i].itemPackagePrice);
+                var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
                 if (data[i].itemSaving !== 0) {
-                    card.find('h5#item-saving').show();
-                    card.find('b#item-saving').text('You will save $' + data[i].itemSaving.toFixed(2) + '!');
+                    card.find('#wasPrice').show();
+                    card.find('#wasPrice').text('Was $' + itemPrice.toFixed(2));
+                    card.find('#discount').show();
+                    card.find('#discount').text((data[i].itemSaving / itemPrice * 100).toFixed() + '%OFF');
                 }
-                else card.find('h5#item-saving').hide();
+                else {
+                    card.find('#wasPrice').hide();
+                    card.find('#discount').hide();
+                }
                 if (data[i].itemPromoQty !== 0) {
                     card.find('h5#item-promo').show();
                     card.find('b#item-promo').text('You will save $' + (((data[i].itemDollar + data[i].itemCent) * data[i].itemPromoQty) - data[i].itemPromoPrice) + ' if you buy ' + data[i].itemPromoQty + '!');
@@ -135,6 +127,7 @@ function createList(data, cards, url) {
                 var currentCard = card.clone().delay(delayTime += 100).fadeTo(400, 1);
                 cards.append(currentCard);
                 textAutoScroll(currentCard);
+                titleResponsive(currentCard);
                 card.find('#currency').show();
             }
             addToShoppingList(cards, data);
@@ -159,6 +152,16 @@ function textAutoScroll(card) {
         }
         infinite();
     }
+    else if (height / lineHeight <= 1 && $(window).width() < 768)
+        card.find('#itemDesc').css('margin-bottom', lineHeight + 'px');
+}
+
+function titleResponsive(card) {
+    var title = card.find('#cardTitle');
+    if (card.attr('id') === 'active_listColes') title.text('Coles').css('background-color', '#de1f27');
+    else title.text('Woolworths').css('background-color', '#178841');
+    if ($(window).width() >= 768) title.css('writing-mode', 'vertical-rl').addClass('rounded-left');
+    else title.css('writing-mode', 'horizontal-tb').addClass('rounded-top');
 }
 
 // create shopping list with animation
@@ -166,7 +169,7 @@ function addToShoppingList(cards, data) {
     cards.unbind(); // It's necessary to unbind all handlers before binding new onclick functions
     cards.on('click', '.card', (e) => {
         var chosenItem = $(e.currentTarget).find('img').clone().removeClass('border-0').addClass('rounded-circle chosen-item');
-        var chosenData = data[$('.active_' + cards.attr('id')).index($(e.currentTarget))];
+        var chosenData = data[$('#active_' + cards.attr('id')).index($(e.currentTarget))];
         var vendorCode = '';
         if (cards.attr('id') === 'listColes') {
             chosenItem.css('box-shadow', 'inset 0 0 0 2vmax #de1f27');

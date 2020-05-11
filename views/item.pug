@@ -19,17 +19,21 @@
 //-                     b#dollar(style="font-size: 2rem")
 //-                 span#cent(style="font-size: 1rem")
 
-.card.border-0.shadow-m.click-effect.mb-2.border-left(style="display: none")
-    #list-item.row.no-gutters.flex-md-nowrap
+.card.border-0.shadow-m.click-effect.mb-2(style="display: none")
+    .row.no-gutters.flex-md-nowrap
+        #cardTitle.col-md-auto.text-white.text-center.p-1.nm-font
         .col-md-5.col-lg-4.col-xl-3.d-flex.align-items-center
-            img.rounded.img-fluid.w-100
+            img.img-fluid.w-100
         .col-md-7.card-body.p-2.pl-md-1.pt-md-3.pb-md-3.d-flex.flex-column.justify-content-around
             .card-title.d-flex
-                p#currency.mb-0(style="font-size: 1.2em") $
-                p#dollar.mb-0(style="font-size: 1.2em")
-                p#cent.mb-0.align-self-end(style="font-size: .8em; line-height: 2em")
-                p.align-self-end.mb-0.ml-auto.mx-md-3(style="font-size: .8em; line-height: 2em")
-            p#packagePrice.card-subtitle.mb-1(style="font-size: .8em; line-height: 2em")
+                .d-flex
+                    p#currency.mb-0.lg-font $
+                    p#dollar.mb-0.lg-font
+                    p#cent.mb-0.align-self-end.sm-font
+                .d-lg-flex.ml-2
+                    #discount.badge.badge-warning.rounded-pill.align-self-center.p-2
+                    p#wasPrice.mb-0.align-self-end.sm-font.ml-2.d-none.d-lg-block
+            p#packagePrice.card-subtitle.mb-1.sm-font
             #auto-scroll
-                p#itemDesc.card-text(style="font-size: .9em")
+                p#itemDesc.card-text.nm-font
             
