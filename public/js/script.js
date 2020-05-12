@@ -1,11 +1,16 @@
 // store all user chosen data here
 var storedData = {};
 
+//load progress bar and freeze input group until search ended.
 function progressbarLoading() {
+    $('#searchInput').prop('disabled', true);
+    $('#searchButton').prop('disabled', true);
     $('.progress-bar').css('width', (parseInt($('.progress-bar').attr('aria-valuenow')) + 45) + '%').attr('aria-valuenow', parseInt($('.progress-bar').attr('aria-valuenow')) + 45);
         if ($('.progress-bar').attr('aria-valuenow') === '100') {
             $('.progress').addClass('invisible');
             $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+            $('#searchInput').prop('disabled', false);
+            $('#searchButton').prop('disabled', false);
         }
 }
 
@@ -16,7 +21,7 @@ window.addEventListener('load', () => {
         e.preventDefault();
         e.stopPropagation();
         // only allow digits, letters and middle white space
-        if (!$('#query')[0].value.trim().match(/^[0-9a-zA-Z\s]+$/)) {
+        if (!$('#searchInput')[0].value.trim().match(/^[0-9a-zA-Z\s]+$/)) {
             $('.invalid-feedback').fadeIn(() => {
                 $('.invalid-feedback').delay(3000).fadeOut();
             });
@@ -24,8 +29,8 @@ window.addEventListener('load', () => {
         else {
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
-            $('a.list-group-item').remove('#active_listColes');
-            $('a.list-group-item').remove('#active_listWoolies');
+            $('.card').remove('#active_listColes');
+            $('.card').remove('#active_listWoolies');
             fetchFromColes();
             fetchFromWoolies();
         }
@@ -39,13 +44,33 @@ function fetchFromColes() {
         type: 'POST',
         url: '/',
         data: {
-            "query": $('#query')[0].value.trim(),
+            "query": $('#searchInput')[0].value.trim(),
             "userAgent": navigator.userAgent
         }
     }).done((data) => {
         progressbarLoading();
+        var fromColes = [];
+        for (let i = 0; i < data.fromColes.length; i++){
+            var item = data.fromColes[i];
+            var itemPromoQty = 0, itemPromoPrice = 0;
+            if (item.hasOwnProperty("pq")) itemPromoQty = item.pq;
+            if (item.hasOwnProperty("pr")) itemPromoPrice = item.pr;
+            fromColes.push({
+                "itemSKU": item.p,
+                "itemImage": item.t,
+                "itemBrand": item.m,
+                "itemName": item.n,
+                "itemDollar": Math.floor(item.p1.o),
+                "itemCent": item.p1.o % 1,
+                "itemSize": item.a.O3[0],
+                "itemPackagePrice": item.u2,
+                "itemPromoQty": itemPromoQty,
+                "itemPromoPrice": itemPromoPrice,
+                "itemSaving": (item.p1.hasOwnProperty("l4")) ? item.p1.l4 - item.p1.o : 0
+            });
+        }
         console.log(data);
-        createList(data.fromColes, $('#listColes'), urlColes);
+        createList(fromColes, $('#listColes'), urlColes);
     });
 }
 
@@ -54,19 +79,20 @@ function fetchFromWoolies() {
     var urlWoolies = 'https://www.woolworths.com.au/apis/ui/v2/Search/products?pagesize=36&searchterm=';
     $.ajax({
         type: 'GET',
-        url: urlWoolies + $('#query')[0].value.trim(),
+        url: urlWoolies + $('#searchInput')[0].value.trim(),
     }).done((data) => {
         progressbarLoading();
         var fromWoolies = [];
         for (let i = 0; i < data.Products.length; i++){
             var item = data.Products[i].Products[0];
-            var itemPromoQty = 0;
-            var itemPromoPrice = 0;
+            var itemPromoQty = 0, itemPromoPrice = 0;
             if (item.Price === null) continue;  // product unavailable
             if (item.CentreTag.TagContent !== null){
                 if ($(item.CentreTag.TagContent).attr('title') !== undefined) {
-                    itemPromoQty = parseInt($(item.CentreTag.TagContent).attr('title').charAt(0));
-                    itemPromoPrice = parseFloat($(item.CentreTag.TagContent).attr('title').split(' ').pop());
+                    if (Number.isInteger(parseInt($(item.CentreTag.TagContent).attr('title').charAt(0)))){
+                        itemPromoQty = parseInt($(item.CentreTag.TagContent).attr('title').charAt(0));
+                        itemPromoPrice = parseFloat($(item.CentreTag.TagContent).attr('title').split(' ').pop());
+                    }
                 }
             }
             fromWoolies.push({
@@ -96,32 +122,34 @@ function createList(data, cards, url) {
         default:
             var card = cards.children().clone();
             var delayTime = 500;
+            var altImg = 'https://shop.coles.com.au/wcsstore/ColesResponsiveStorefrontAssetStore/dist/d04b5953359411f41db65cc3fdc06d7d/img/img_product-placeholder.png';
             cards.fadeIn();
             for (let i = 0; i < data.length; i++) {
                 card.attr('id', 'active_' + cards.attr('id'));
                 card.find('img').attr({
                     'src': url + data[i].itemImage,
-                    'alt': data[i].itemBrand + ' ' + data[i].itemName
+                    'alt': data[i].itemBrand + ' ' + data[i].itemName,
+                    'onerror': "this.error=null;this.src='" + altImg + "'"
                 });
                 if (card.attr('id') === "active_listWoolies") card.find('img').css('padding', '0.5rem');
                 card.find('#itemDesc').text(data[i].itemBrand + ' ' + data[i].itemName + ' ' + data[i].itemSize);
                 card.find('#packagePrice').text(data[i].itemPackagePrice);
                 var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
+                card.find('p#wasPrice').hide();
+                card.find('#discount').hide();
+                card.find('#item-promo').hide();
                 if (data[i].itemSaving !== 0) {
-                    card.find('#wasPrice').show();
-                    card.find('#wasPrice').text('Was $' + itemPrice.toFixed(2));
-                    card.find('#discount').show();
+                    card.find('p#wasPrice').text('Was $' + itemPrice.toFixed(2));
+                    if ($(window).width() >= 992) card.find('p#wasPrice').show();
                     card.find('#discount').text((data[i].itemSaving / itemPrice * 100).toFixed() + '%OFF');
+                    card.find('#discount').show();
                 }
-                else {
-                    card.find('#wasPrice').hide();
-                    card.find('#discount').hide();
+                else if (data[i].itemPromoQty !== 0) {
+                    card.find('p#wasPrice').text('Each for $' + (data[i].itemPromoPrice / data[i].itemPromoQty).toFixed(2));
+                    if ($(window).width() >= 992) card.find('p#wasPrice').show();
+                    card.find('#item-promo').text(data[i].itemPromoQty + ' for $' + data[i].itemPromoPrice);
+                    card.find('#item-promo').show();
                 }
-                if (data[i].itemPromoQty !== 0) {
-                    card.find('h5#item-promo').show();
-                    card.find('b#item-promo').text('You will save $' + (((data[i].itemDollar + data[i].itemCent) * data[i].itemPromoQty) - data[i].itemPromoPrice) + ' if you buy ' + data[i].itemPromoQty + '!');
-                }
-                else card.find('h5#item-promo').hide();
                 card.find('#dollar').text(data[i].itemDollar);
                 card.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent * 100).toFixed(0));
                 var currentCard = card.clone().delay(delayTime += 100).fadeTo(400, 1);
@@ -140,13 +168,14 @@ function textAutoScroll(card) {
     var lineHeight = card.find('#itemDesc').css('line-height').split('px')[0];
     if (height / lineHeight > 2){
         card.find('#auto-scroll').css({
-            'height': lineHeight * 2,
+            'height': height / (height / lineHeight).toFixed() * 2,
             'overflow-y': 'hidden'
         });
         function infinite(){
-            var hiddenLines = (height / lineHeight).toFixed() - 2;
+            var hiddenHeight = height - lineHeight * 2;
+            var hiddenLines = hiddenHeight / lineHeight;
             card.find('#itemDesc').css('margin-top', 0);
-            card.find('#itemDesc').animate({marginTop: hiddenLines * -lineHeight + 'px'}, hiddenLines * 4000, 'linear', () => {
+            card.find('#itemDesc').animate({marginTop: -hiddenHeight + 'px'}, hiddenLines * 4000, 'linear', () => {
                 infinite();
             });
         }

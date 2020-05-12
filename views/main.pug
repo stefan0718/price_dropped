@@ -4,14 +4,6 @@ block append head
 
     script(type="text/javascript" src="/js/script.js")
 
-//- block background
-
-//-     #background.d-flex.justify-content-center.background.align-items-center.fixed-top(style="display: none")
-//-         .flex-column
-//-             p.text-gradient Price&ensp;
-//-                 i.fas.fa-tags
-//-             p.text-gradient Dropped
-
 //- block search_bar
 
 //-     .row.justify-content-center
@@ -33,21 +25,13 @@ block append head
 //-         //- #shopping-summary.w-25
 //-         //-     i.fas.fa-cart-plus.zoom.onclick.m-auto(style="font-size: 5vmax")
 
-//- block loading_spinner
-
-//-     .d-flex.justify-content-center
-//-         .loading(style="display: none")
+block shopping_list
+    .fixed-bottom
 
 block search_result
 
-    //- #search-result
-    //-     #listColes.list-group.pr-1(style="display: none")
-    //-         include item
-    //-     #listWoolies.list-group.pl-1(style="display: none")
-    //-         include item
-
-    .row.no-gutters.p-2.p-md-4
-        #listColes.col-6.pr-1.pr-md-2
-            include item
-        #listWoolies.col-6.pl-1.pl-md-2
-            include item
+    .d-flex.flex-row.no-gutters.p-2.p-md-4.justify-content-center
+        #listColes.col-6.col-lg-5.pr-1.pr-md-2
+            include card
+        #listWoolies.col-6.col-lg-5.pl-1.pl-md-2
+            include card

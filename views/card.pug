@@ -21,19 +21,20 @@
 
 .card.border-0.shadow-m.click-effect.mb-2(style="display: none")
     .row.no-gutters.flex-md-nowrap
-        #cardTitle.col-md-auto.text-white.text-center.p-1.nm-font
-        .col-md-5.col-lg-4.col-xl-3.d-flex.align-items-center
+        #cardTitle.col-md-auto.text-white.text-center.p-1.md-font
+        .col-md-5.col-lg-4.col-xl-3.d-flex.align-items-center.col-8.mx-auto
             img.img-fluid.w-100
         .col-md-7.card-body.p-2.pl-md-1.pt-md-3.pb-md-3.d-flex.flex-column.justify-content-around
-            .card-title.d-flex
-                .d-flex
+            .card-text.d-flex.mb-1
+                .d-flex.align-self-end
                     p#currency.mb-0.lg-font $
                     p#dollar.mb-0.lg-font
-                    p#cent.mb-0.align-self-end.sm-font
+                    p#cent.mb-0.sm-font.align-self-end(style="line-height: 2.1em")
                 .d-lg-flex.ml-2
-                    #discount.badge.badge-warning.rounded-pill.align-self-center.p-2
-                    p#wasPrice.mb-0.align-self-end.sm-font.ml-2.d-none.d-lg-block
-            p#packagePrice.card-subtitle.mb-1.sm-font
+                    #discount.badge.badge-warning.rounded-pill.sm-font.align-self-center
+                    #item-promo.badge.badge-warning.rounded-pill.sm-font.align-self-center
+                    p#wasPrice.mb-0.sm-font.ml-2.align-self-center.text-secondary
+            p#packagePrice.card-subtitle.sm-font.pt-1.pb-1.p-md-0.text-secondary
             #auto-scroll
-                p#itemDesc.card-text.nm-font
+                p#itemDesc.card-text.md-font
             

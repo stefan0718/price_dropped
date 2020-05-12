@@ -12,14 +12,11 @@ body {
     src: url('/font/Reach the End.otf')
 }
 
-.sm-font {
-    font-size: .8em;
-    line-height: 2em
-}
+.sm-font { font-size: .6em }
 
-.nm-font { font-size: 0.9em }
+.md-font { font-size: .8em }
 
-.lg-font { font-size: 1.2em }
+.lg-font { font-size: 1em }
 
 .logo {
     font-family: ReachTheEnd;
@@ -75,7 +72,7 @@ span.badge {
 
 .click-effect { transition: 0.2s; }
 
-.click-effect:active { transform: scale(0.98); }
+.click-effect:active { transform: scale(0.8); }
 
 button:focus { outline: none; }
 
