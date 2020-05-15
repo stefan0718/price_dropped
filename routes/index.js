@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const puppeteer = require('puppeteer');
-const urlColes = 'https://shop.coles.com.au/online/COLRSSearchDisplay?storeId=20503&tabType=everything&searchTerm=';
+const urlColes = 'https://shop.coles.com.au/online/COLRSSearchDisplay?storeId=20503&catalogId=37101&tabType=everything&searchTerm=';
 
 // function writeHtml(html) {
 //     const fs = require('fs');

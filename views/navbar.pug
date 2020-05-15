@@ -1,6 +1,6 @@
 #navBar.fixed-top
     nav.navbar.navbar-expand-md.bg-white.shadow-m.pt-1.pb-1.text-dark
-        button.navbar-toggler.border-0(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+        button#burgerCollapse.navbar-toggler.border-0(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
             i.fas.fa-hamburger.click-effect.text-dark
         a.navbar-brand.logo.h1.mb-0.m-auto.p-0.flex-column.click-effect(href="#")
             p.text-gradient Price&ensp;
@@ -12,7 +12,7 @@
             .navbar-nav
                 a.nav-item.nav-link.text-dark(href="#") Home
                 a.nav-item.nav-link.text-dark(href="#") Featured
-                a.nav-item.nav-link.text-dark(href="#") List 
+                a#list.nav-item.nav-link.text-dark(href="#") List 
                     i.fas.fa-sticky-note
                 a.nav-item.nav-link.text-dark(href="#") About
         form#navSearch.form-inline.collapse.navbar-collapse.needs-validation(action="." method="POST" novalidate)

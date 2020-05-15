@@ -19,12 +19,13 @@
 //-                     b#dollar(style="font-size: 2rem")
 //-                 span#cent(style="font-size: 1rem")
 
-.card.border-0.shadow-m.click-effect.mb-2(style="display: none")
+.card.border-0.shadow-m.mb-2(style="display: none")
+    #cardMask.bg-dark.w-100.h-100.rounded(style="position: absolute; z-index: 100; opacity: 0")
     .row.no-gutters.flex-md-nowrap
         #cardTitle.col-md-auto.text-white.text-center.p-1.md-font
         .col-md-5.col-lg-4.col-xl-3.d-flex.align-items-center.col-8.mx-auto
-            img.img-fluid.w-100
-        .col-md-7.card-body.p-2.pl-md-1.pt-md-3.pb-md-3.d-flex.flex-column.justify-content-around
+            img.img-fluid.w-100.p-2
+        .col-md-7.col-lg-8.col-xl-9.card-body.p-2.pl-md-1.pt-md-3.pb-md-3.pr-md-3.d-flex.flex-column.justify-content-around
             .card-text.d-flex.mb-1
                 .d-flex.align-self-end
                     p#currency.mb-0.lg-font $
