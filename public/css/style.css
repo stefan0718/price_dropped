@@ -1,6 +1,4 @@
-body {
-    font-family: Jost;
-}
+body { font-family: Jost; }
 
 @font-face {
     font-family: Jost;
@@ -18,21 +16,7 @@ body {
 
 .lg-font { font-size: 1em }
 
-.logo {
-    font-family: ReachTheEnd;
-}
-
-.background {
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    font-size: 10vmax;
-    color: #424242;
-    font-weight: 600;
-    line-height: 1.1;
-    z-index: -1;
-    font-family: ReachTheEnd;
-}
+.logo { font-family: ReachTheEnd; }
 
 .text-gradient {
     background: linear-gradient(to right, #de1f27, #de1f29c4, #de1f2985, #17884185, #178841c4, #178841);
@@ -40,34 +24,6 @@ body {
     -webkit-background-clip: text;
     color: rgba(0,0,0,0);
     margin-bottom: 0;
-}
-
-.gradient-coles {
-    background: linear-gradient(to right, #de1f27, #ffffff);
-}
-
-.gradient-ww {
-    background: linear-gradient(to right, #ffffff, #178841);
-}
-
-.chosen-item {
-    display: none;
-    width: 7vmax;
-    height: 7vmax;
-    visibility: visible;
-    border: 0
-}
-
-.item-container {
-    visibility: hidden;
-    width: 7vmax;
-    height: 7vmax;
-}
-
-span.badge {
-    display: none;
-    visibility: visible;
-    position: absolute; 
 }
 
 .click-effect { transition: 0.2s; }
@@ -78,36 +34,6 @@ button:focus { outline: none; }
 
 .btn:focus, .form-control:focus { box-shadow: none }
 
-/* .shadow-n {
-    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
-} */
-
 .shadow-m {
     box-shadow: 0 1px 1px 0 rgba(60,75,100,.14), 0 2px 1px -1px rgba(60,75,100,.12), 0 1px 3px 0 rgba(60,75,100,.2)
 }
-
-/* .loading {
-    border: 2vmax solid #3a3a3a;
-    border-top: 2vmax solid #3a3a3a00;
-    border-radius: 50%;
-    width: 20vmax;
-    height: 20vmax;
-    -webkit-animation: loading-animation 1s linear infinite;
-    -moz-animation: loading-animation 1s linear infinite;
-    animation: loading-animation 1s linear infinite
-}
-
-@keyframes loading-animation {
-    0% { transform: rotate(0deg) }
-    100% { transform: rotate(360deg) }
-}
-
-@-webkit-keyframes loading-animation {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-}
-
-@-moz-keyframes loading-animation {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-} */

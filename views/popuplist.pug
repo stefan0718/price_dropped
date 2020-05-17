@@ -1,0 +1,13 @@
+#popupList.modal.fade(role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="popupListLabel")
+    .modal-dialog.modal-dialog-centered(role="document")
+        .modal-content
+            .modal-header
+                #popupListLabel.modal-title.nav.nav-pills
+                    a.nav-item.nav-link.active.bg-danger All
+                    a.nav-item.nav-link Coles
+                    a.nav-item.nav-link Woolworths
+                button.close(type="button" data-dismiss="modal" aria-label="Close")
+                    i.fas.fa-times(aria-hidden="true")
+            .modal-body
+            .modal-footer
+                button.btn.btn-light(data-dismiss="modal") Close

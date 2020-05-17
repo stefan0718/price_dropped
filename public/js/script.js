@@ -1,18 +1,19 @@
 //load progress bar and freeze input group until search ended.
 function progressbarLoading() {
-    $('#searchInput').prop('disabled', true);
-    $('#searchButton').prop('disabled', true);
+    $('#searchInput, #searchButton').prop('disabled', true);
     $('.progress-bar').css('width', (parseInt($('.progress-bar').attr('aria-valuenow')) + 45) + '%').attr('aria-valuenow', parseInt($('.progress-bar').attr('aria-valuenow')) + 45);
         if ($('.progress-bar').attr('aria-valuenow') === '100') {
             $('.progress').addClass('invisible');
             $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
-            $('#searchInput').prop('disabled', false);
-            $('#searchButton').prop('disabled', false);
+            $('#searchInput, #searchButton').prop('disabled', false);
         }
 }
 
 window.addEventListener('load', () => {
-    $('body').css('padding-top', $('#navBar').height());
+    $('#searchResult').css('padding-top', $('#navBar').height());
+    $('#navbarNav a#list').on('click', () => {
+        $('#navSearch, #navbarNav').collapse('hide');
+    });
     var form = document.querySelector('.needs-validation');
     form.addEventListener('submit', e => {
         e.preventDefault();
@@ -24,11 +25,11 @@ window.addEventListener('load', () => {
             });
         }
         else {
-            $('#navSearch').collapse('hide');
+            $('#navSearch, #navbarNav').collapse('hide');
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
-            $('.card').remove('#active_listColes');
-            $('.card').remove('#active_listWoolies');
+            $('.card').remove('#active_listColes, #active_listWoolies');
+            $('.card').find('#cardMask').css('opacity', '0');
             fetchFromColes();
             fetchFromWoolies();
         }
@@ -63,7 +64,7 @@ function fetchFromColes() {
                 "itemSize": item.a.O3[0],
                 "itemPackagePrice": item.u2,
                 "itemPromoQty": itemPromoQty,
-                "itemPromoPrice": itemPromoPrice,
+                "itemPromoPrice": parseFloat(itemPromoPrice).toFixed(2),
                 "itemSaving": (item.p1.hasOwnProperty("l4")) ? item.p1.l4 - item.p1.o : 0
             });
         }
@@ -132,9 +133,7 @@ function createList(data, cards, url) {
                 card.find('#itemDesc').text(data[i].itemBrand + ' ' + data[i].itemName + ' ' + data[i].itemSize);
                 card.find('#packagePrice').text(data[i].itemPackagePrice);
                 var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
-                card.find('p#wasPrice').hide();
-                card.find('#discount').hide();
-                card.find('#item-promo').hide();
+                card.find('p#wasPrice, #discount, #item-promo').hide();
                 if (data[i].itemSaving !== 0) {
                     card.find('p#wasPrice').text('Was $' + itemPrice.toFixed(2));
                     if ($(window).width() >= 992) card.find('p#wasPrice').show();
@@ -207,8 +206,7 @@ function chooseCards(cards, data) {
     storedData.lastAddedFrom = cardFrom;
     if (!storedData[cardFrom].isAdded && $(e.currentTarget).find('#cardMask').css('opacity') === '0'){
         if (storedData.SKUs.includes(chosenData.itemSKU)){
-            $('#prompt-1').collapse('hide');
-            $('#prompt-2').collapse('hide');
+            $('#prompt-1, #prompt-2').collapse('hide');
             $('#prompt #promptText').text('You have already chosen this product. Check it on your list :)');
             $('#prompt').collapse('show');
             setTimeout(() => {
@@ -236,15 +234,13 @@ function chooseCards(cards, data) {
                 $('#prompt-2').collapse('show');
             }
             else if (storedData[cardFrom].isAdded){
+                var cardFrom = (cardFrom === 'Coles') ? 'Woolies' : 'Coles';
                 $('#prompt-1 #promptText').text('Try to find a comparable product from ' + cardFrom + ' :)');
                 $('#prompt-1').collapse('show');
             }
         }
     }
     promptControl(); 
-        // var chosenCard = $(e.currentTarget).find('img').clone().removeClass('border-0').addClass('rounded-circle chosen-item');
-
-        // addToShoppingListAnimation(chosenCard, e.currentTarget, latestAdded);
     });
 }
 
@@ -295,11 +291,12 @@ function storeCards() {
     $('#prompt').collapse('show');
     setTimeout(() => {
         $('#prompt').collapse('hide');
-    }, 2000);
+    }, 3000);
     var lastColesCard = storedData.Coles.cards[storedData.Coles.cards.length - 1];
     var lastWooliesCard = storedData.Woolies.cards[storedData.Woolies.cards.length - 1]
     addToListAnimation(lastColesCard, $('#listColes'));
     addToListAnimation(lastWooliesCard, $('#listWoolies'));
+    $('#navbarNav a#list .badge').text(storedData.Coles.cards.length);
     console.log(storedData);
 }
 
@@ -330,38 +327,3 @@ function addToListAnimation(lastCard, parent) {
         parent.children().eq(lastCard.cardIndex).fadeOut();
     }
 }
-
-// function addToShoppingListAnimation (chosenCard, parentList, latestAdded) {
-//     $('.item-container:first-child').hide();
-//     var container = $('.item-container:first-child').clone().attr('id', 'container-' + latestAdded.order).show();
-//     var animated = chosenCard.clone().offset({
-//         top: $(parentList).find('img').offset().top,
-//         left: $(parentList).find('img').offset().left
-//     }).css({
-//         'opacity': '0.8',
-//         'position': 'absolute',
-//         'z-index': '10',
-//         'display': 'block'
-//     });
-//     if (latestAdded.qty <= 1) {
-//         container.append(chosenCard).appendTo($('#shopping-list'));
-//         //container.animate({ 'height': '7vmax' }, 1000);
-//     }
-//     var latestContainer = $('#shopping-list').find('#container-' + latestAdded.order);
-//     animated.appendTo(latestContainer).animate({
-//         'top': $('#shopping-list').offset().top,
-//         'left': latestContainer.offset().left,
-//         'opacity': 0
-//     }, 1000, 'swing');
-//     chosenCard.css({
-//         'display': 'inline',
-//         'opacity': 0
-//     }).animate({'opacity': 1}, 1000, () => {
-//         latestContainer.find('span#item-qty').text(latestAdded.qty).fadeIn();
-//         animated.remove();
-//     });
-//     // chosenCard.delay(1000).fadeIn(() => {
-//     //     latestContainer.find('span#item-qty').text(latestAdded.qty).fadeIn();
-//     //     animated.remove();
-//     // });
-// }
