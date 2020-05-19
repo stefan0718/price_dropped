@@ -11,9 +11,6 @@ function progressbarLoading() {
 
 window.addEventListener('load', () => {
     $('#searchResult').css('padding-top', $('#navBar').height());
-    $('#navbarNav a#list').on('click', () => {
-        $('#navSearch, #navbarNav').collapse('hide');
-    });
     var form = document.querySelector('.needs-validation');
     form.addEventListener('submit', e => {
         e.preventDefault();
@@ -28,8 +25,8 @@ window.addEventListener('load', () => {
             $('#navSearch, #navbarNav').collapse('hide');
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
-            $('.card').remove('#active_listColes, #active_listWoolies');
-            $('.card').find('#cardMask').css('opacity', '0');
+            $('#searchResult .card').remove('#active_listColes, #active_listWoolies');
+            $('#searchResult #cardMask').css('opacity', '0');
             fetchFromColes();
             fetchFromWoolies();
         }
@@ -68,7 +65,6 @@ function fetchFromColes() {
                 "itemSaving": (item.p1.hasOwnProperty("l4")) ? item.p1.l4 - item.p1.o : 0
             });
         }
-        console.log(data);
         createList(fromColes, $('#listColes'), urlColes);
     });
 }
@@ -82,79 +78,76 @@ function fetchFromWoolies() {
     }).done((data) => {
         progressbarLoading();
         var fromWoolies = [];
-        for (let i = 0; i < data.Products.length; i++){
-            var item = data.Products[i].Products[0];
-            var itemPromoQty = 0, itemPromoPrice = 0;
-            if (item.Price === null) continue;  // product unavailable
-            if (item.CentreTag.TagContent !== null){
-                if ($(item.CentreTag.TagContent).attr('title') !== undefined) {
-                    if (Number.isInteger(parseInt($(item.CentreTag.TagContent).attr('title').charAt(0)))){
-                        itemPromoQty = parseInt($(item.CentreTag.TagContent).attr('title').charAt(0));
-                        itemPromoPrice = parseFloat($(item.CentreTag.TagContent).attr('title').split(' ').pop());
+        if (data.Products !== null){
+            for (let i = 0; i < data.Products.length; i++){
+                var item = data.Products[i].Products[0];
+                var itemPromoQty = 0, itemPromoPrice = 0;
+                if (item.Price === null) continue;  // product unavailable
+                if (item.CentreTag.TagContent !== null){
+                    var itemPromo = $(item.CentreTag.TagContent).attr('title');
+                    if (itemPromo !== undefined) {
+                        if (Number.isInteger(parseInt(itemPromo.charAt(0)))){
+                            itemPromoQty = parseInt(itemPromo.charAt(0));
+                            itemPromoPrice = parseFloat(itemPromo.split(' ').pop());
+                        }
                     }
                 }
+                fromWoolies.push({
+                    "itemSKU": item.Stockcode,
+                    "itemImage": item.MediumImageFile,
+                    "itemBrand": (item.Brand === null) ? '' : item.Brand.charAt(0).toUpperCase() + item.Brand.slice(1),
+                    "itemName": (item.Brand === null) ? item.Name.trim() : item.Name.slice(item.Brand.length).trim(),
+                    "itemDollar": Math.floor(item.Price),
+                    "itemCent": (item.Price % 1),
+                    "itemSize": item.PackageSize,
+                    "itemPackagePrice": item.CupString,
+                    "itemPromoQty": itemPromoQty,
+                    "itemPromoPrice": itemPromoPrice,
+                    "itemSaving": item.WasPrice - item.Price
+                });
             }
-            fromWoolies.push({
-                "itemSKU": item.Stockcode,
-                "itemImage": item.MediumImageFile,
-                "itemBrand": (item.Brand === null) ? '' : item.Brand.charAt(0).toUpperCase() + item.Brand.slice(1),
-                "itemName": (item.Brand === null) ? item.Name.trim() : item.Name.slice(item.Brand.length).trim(),
-                "itemDollar": Math.floor(item.Price),
-                "itemCent": (item.Price % 1),
-                "itemSize": item.PackageSize,
-                "itemPackagePrice": item.CupString,
-                "itemPromoQty": itemPromoQty,
-                "itemPromoPrice": itemPromoPrice,
-                "itemSaving": item.WasPrice - item.Price
-            });
         }
-        console.log(fromWoolies);
         createList(fromWoolies, $('#listWoolies'), '');
     });
 }
 
 // create search result
 function createList(data, cards, url) {
-    switch (data.length) {
-        case 0:
-            break;
-        default:
-            var card = cards.children().clone();
-            var delayTime = 500;
-            var altImg = 'https://shop.coles.com.au/wcsstore/ColesResponsiveStorefrontAssetStore/dist/d04b5953359411f41db65cc3fdc06d7d/img/img_product-placeholder.png';
-            cards.fadeIn();
-            for (let i = 0; i < data.length; i++) {
-                card.attr('id', 'active_' + cards.attr('id'));
-                card.find('img').attr({
-                    'src': url + data[i].itemImage,
-                    'alt': data[i].itemBrand + ' ' + data[i].itemName,
-                    'onerror': "this.error=null;this.src='" + altImg + "'"
-                });
-                card.find('#itemDesc').text(data[i].itemBrand + ' ' + data[i].itemName + ' ' + data[i].itemSize);
-                card.find('#packagePrice').text(data[i].itemPackagePrice);
-                var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
-                card.find('p#wasPrice, #discount, #item-promo').hide();
-                if (data[i].itemSaving !== 0) {
-                    card.find('p#wasPrice').text('Was $' + itemPrice.toFixed(2));
-                    if ($(window).width() >= 992) card.find('p#wasPrice').show();
-                    card.find('#discount').text((data[i].itemSaving / itemPrice * 100).toFixed() + '%OFF');
-                    card.find('#discount').show();
-                }
-                else if (data[i].itemPromoQty !== 0) {
-                    card.find('p#wasPrice').text('Each for $' + (data[i].itemPromoPrice / data[i].itemPromoQty).toFixed(2));
-                    if ($(window).width() >= 992) card.find('p#wasPrice').show();
-                    card.find('#item-promo').text(data[i].itemPromoQty + ' for $' + data[i].itemPromoPrice);
-                    card.find('#item-promo').show();
-                }
-                card.find('#dollar').text(data[i].itemDollar);
-                card.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent * 100).toFixed(0));
-                var currentCard = card.clone().delay(delayTime += 100).fadeTo(400, 1);
-                cards.append(currentCard);
-                textAutoScroll(currentCard);
-                titleResponsive(currentCard);
-                card.find('#currency').show();
+    if (data.length > 0){
+        var card = cards.children().clone();
+        var delayTime = 500;
+        var altImg = 'https://shop.coles.com.au/wcsstore/ColesResponsiveStorefrontAssetStore/dist/d04b5953359411f41db65cc3fdc06d7d/img/img_product-placeholder.png';
+        for (let i = 0; i < data.length; i++) {
+            card.attr('id', 'active_' + cards.attr('id'));
+            card.find('img').attr({
+                'src': url + data[i].itemImage,
+                'alt': data[i].itemBrand + ' ' + data[i].itemName,
+                'onerror': "this.error=null;this.src='" + altImg + "'"
+            });
+            card.find('#itemDesc').text(data[i].itemBrand + ' ' + data[i].itemName + ' ' + data[i].itemSize);
+            card.find('#packagePrice').text(data[i].itemPackagePrice);
+            var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
+            card.find('p#wasPrice, #discount, #item-promo').hide();
+            if (data[i].itemSaving !== 0) {
+                card.find('p#wasPrice').text('Was $' + itemPrice.toFixed(2));
+                if ($(window).width() >= 992) card.find('p#wasPrice').show();
+                card.find('#discount').text((data[i].itemSaving / itemPrice * 100).toFixed() + '%OFF');
+                card.find('#discount').show();
             }
-            chooseCards(cards, data);
+            else if (data[i].itemPromoQty !== 0) {
+                card.find('p#wasPrice').text('Each for $' + (data[i].itemPromoPrice / data[i].itemPromoQty).toFixed(2));
+                if ($(window).width() >= 992) card.find('p#wasPrice').show();
+                card.find('#item-promo').text(data[i].itemPromoQty + ' for $' + data[i].itemPromoPrice);
+                card.find('#item-promo').show();
+            }
+            card.find('#dollar').text(data[i].itemDollar);
+            card.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent * 100).toFixed(0));
+            var currentCard = card.clone().delay(delayTime += 100).fadeTo(400, 1);
+            cards.append(currentCard);
+            textAutoScroll(currentCard);
+            titleResponsive(currentCard);
+        }
+        chooseCards(cards, data);
     }
 }
 
@@ -193,8 +186,18 @@ function titleResponsive(card) {
 var storedData = {
     "lastAddedFrom": "",
     "SKUs": [],
-    "Coles": {"isAdded": false, "cards": []},
-    "Woolies": {"isAdded": false, "cards": []}
+    "Coles": {
+        "isAdded": false, 
+        "cards": [],
+        "totalPrice": 0,
+        "totalSaving": 0
+    },
+    "Woolies": {
+        "isAdded": false, 
+        "cards": [],
+        "totalPrice": 0,
+        "totalSaving": 0
+    }
 };
 
 // create shopping list with animation
@@ -222,7 +225,11 @@ function chooseCards(cards, data) {
             }, 500, 'linear');
             storedData.SKUs.push(chosenData.itemSKU);
             chosenData.cardIndex = $(e.currentTarget).index();
+            chosenData.itemPrice = chosenData.itemCent + chosenData.itemDollar;
+            chosenData.itemVendor = (cardFrom === 'Coles') ? 'co' : 'ww';
             storedData[cardFrom].cards.push(chosenData);
+            storedData[cardFrom].totalPrice += chosenData.itemPrice;
+            storedData[cardFrom].totalSaving += chosenData.itemSaving;
             storedData[cardFrom].isAdded = true;
             if (storedData.Coles.isAdded && storedData.Woolies.isAdded){
                 var lastAddedColes = storedData.Coles.cards[storedData.Coles.cards.length - 1];
@@ -272,15 +279,18 @@ function rechooseCards() {
     $('#list' + storedData.lastAddedFrom).children().find('#cardMask').animate({
         'opacity': '0'
     }, 500, 'linear');
-    storedData[storedData.lastAddedFrom].cards.pop();
+    var removedCard = storedData[storedData.lastAddedFrom].cards.pop();
+    storedData[storedData.lastAddedFrom].totalPrice -= removedCard.itemPrice;
+    storedData[storedData.lastAddedFrom].totalSaving -= removedCard.itemSaving;
     storedData.SKUs.pop();
+    console.log(storedData);
     storedData[storedData.lastAddedFrom].isAdded = false;
     if (storedData.lastAddedFrom === 'Coles' && storedData.Woolies.isAdded) storedData.lastAddedFrom = 'Woolies';
     if (storedData.lastAddedFrom === 'Woolies' && storedData.Coles.isAdded) storedData.lastAddedFrom = 'Coles';
 }
 
 function storeCards() {
-    $('.card').find('#cardMask').animate({
+    $('#searchResult #cardMask').animate({
         'opacity': '0'
     }, 500, 'linear');
     if (storedData.Coles.isAdded && !storedData.Woolies.isAdded) storedData.Woolies.cards.push({});
@@ -297,7 +307,6 @@ function storeCards() {
     addToListAnimation(lastColesCard, $('#listColes'));
     addToListAnimation(lastWooliesCard, $('#listWoolies'));
     $('#navbarNav a#list .badge').text(storedData.Coles.cards.length);
-    console.log(storedData);
 }
 
 function addToListAnimation(lastCard, parent) {
