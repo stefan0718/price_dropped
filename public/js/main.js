@@ -61,7 +61,7 @@ function fetchFromColes() {
                 "itemSize": item.a.O3[0],
                 "itemPackagePrice": item.u2,
                 "itemPromoQty": itemPromoQty,
-                "itemPromoPrice": parseFloat(itemPromoPrice).toFixed(2),
+                "itemPromoPrice": parseFloat(itemPromoPrice).toFixed(2) * itemPromoQty,
                 "itemSaving": (item.p1.hasOwnProperty("l4")) ? item.p1.l4 - item.p1.o : 0
             });
         }
@@ -147,7 +147,7 @@ function createList(data, cards, url) {
             textAutoScroll(currentCard);
             titleResponsive(currentCard);
         }
-        chooseCards(cards, data);
+        addCards(cards, data);
     }
 }
 
@@ -186,22 +186,22 @@ function titleResponsive(card) {
 var storedData = {
     "lastAddedFrom": "",
     "SKUs": [],
+    "shownMap": [],
+    "qty": [],
+    "totalPrice": 0,
+    "totalSaving": 0,
     "Coles": {
         "isAdded": false, 
-        "cards": [],
-        "totalPrice": 0,
-        "totalSaving": 0
+        "cards": []
     },
     "Woolies": {
         "isAdded": false, 
-        "cards": [],
-        "totalPrice": 0,
-        "totalSaving": 0
+        "cards": []
     }
 };
 
 // create shopping list with animation
-function chooseCards(cards, data) {
+function addCards(cards, data) {
     cards.unbind(); // It's necessary to unbind all handlers before binding new onclick functions
     cards.on('click', '.card', (e) => {
     var chosenData = data[$(e.currentTarget).index() - 1];
@@ -226,10 +226,7 @@ function chooseCards(cards, data) {
             storedData.SKUs.push(chosenData.itemSKU);
             chosenData.cardIndex = $(e.currentTarget).index();
             chosenData.itemPrice = chosenData.itemCent + chosenData.itemDollar;
-            chosenData.itemVendor = (cardFrom === 'Coles') ? 'co' : 'ww';
             storedData[cardFrom].cards.push(chosenData);
-            storedData[cardFrom].totalPrice += chosenData.itemPrice;
-            storedData[cardFrom].totalSaving += chosenData.itemSaving;
             storedData[cardFrom].isAdded = true;
             if (storedData.Coles.isAdded && storedData.Woolies.isAdded){
                 var lastAddedColes = storedData.Coles.cards[storedData.Coles.cards.length - 1];
@@ -279,9 +276,6 @@ function rechooseCards() {
     $('#list' + storedData.lastAddedFrom).children().find('#cardMask').animate({
         'opacity': '0'
     }, 500, 'linear');
-    var removedCard = storedData[storedData.lastAddedFrom].cards.pop();
-    storedData[storedData.lastAddedFrom].totalPrice -= removedCard.itemPrice;
-    storedData[storedData.lastAddedFrom].totalSaving -= removedCard.itemSaving;
     storedData.SKUs.pop();
     console.log(storedData);
     storedData[storedData.lastAddedFrom].isAdded = false;
@@ -297,6 +291,7 @@ function storeCards() {
     else if (!storedData.Coles.isAdded && storedData.Woolies.isAdded) storedData.Coles.cards.push({});
     storedData.Coles.isAdded = false;  // initialize status
     storedData.Woolies.isAdded = false;  // initialize status
+    storedData.qty.push(1);
     $('#prompt #promptText').text('Products have been successfully added to your list!');
     $('#prompt').collapse('show');
     setTimeout(() => {
