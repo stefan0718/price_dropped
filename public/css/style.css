@@ -30,22 +30,24 @@ body { font-family: Jost; }
 
 .click-effect:active { transform: scale(0.8); }
 
-button:focus { outline: none; }
-
-.btn:focus, .form-control:focus { box-shadow: none }
+button:focus, .btn:focus, .form-control:focus { 
+    outline: none; 
+    box-shadow: none;
+}
 
 .shadow-m {
     box-shadow: 0 1px 1px 0 rgba(60,75,100,.14), 0 2px 1px -1px rgba(60,75,100,.12), 0 1px 3px 0 rgba(60,75,100,.2)
 }
 
+.modal-body { overflow-y: auto; }
+
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }

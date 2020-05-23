@@ -2,14 +2,6 @@ const router = require('express').Router();
 const puppeteer = require('puppeteer');
 const urlColes = 'https://shop.coles.com.au/online/COLRSSearchDisplay?storeId=20503&catalogId=37101&tabType=everything&searchTerm=';
 
-// function writeHtml(html) {
-//     const fs = require('fs');
-//     fs.writeFile('test.html', html, err => {
-//         if (err) throw err;
-//         console.log('Saved!');
-//     });
-// }
-
 router.get('/', (req, res) => {
     res.render('main', {title: 'Compare and Get the Lowest Price'});
 });
@@ -41,12 +33,6 @@ router.post('/', (req, res) => {
         res.send(metadata);
         await browser.close();
     })();
-
-    // const fs = require('fs');
-    // fs.readFile('fromColes.json', 'utf-8', (err, data) => {
-    //     if (err) throw err;
-    //     res.send(JSON.parse(data));
-    // });
 });
 
 module.exports = router;

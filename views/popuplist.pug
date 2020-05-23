@@ -1,13 +1,14 @@
 #popupList.modal.fade.text-dark(role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="popupListLabel")
     .modal-dialog.modal-dialog-centered(role="document")
         .modal-content.border-0.shadow-m
-            .modal-header
-                #popupListLabel.modal-title.nav.nav-pills
-                    button.nav-item.nav-link.border-0.btn.active.bg-secondary(type="button") All
-                    a.nav-item.nav-link(type="button") Coles
-                    a.nav-item.nav-link(type="button") Woolworths
+            .modal-header.p-2
+                #popupListLabel.modal-title
+                    button#all.btn.btn-sm.btn-outline-secondary(type="button") All
+                .mx-auto.d-flex
+                    button#co.btn.btn-sm.btn-outline-danger.mr-1(type="button") Coles
+                    button#ww.btn.btn-sm.btn-outline-success(type="button") Woolworths
                 button.close(type="button" data-dismiss="modal" aria-label="Close")
-                    i.fas.fa-times(aria-hidden="true")
+                    i.fas.fa-times.p-1.md-font(aria-hidden="true")
             .modal-body.p-1
                 #popupCard.card.border-0.shadow-m.mb-1(style="display: none")
                     .row.no-gutters.flex-nowrap
@@ -19,28 +20,28 @@
                             .align-self-center.p-1
                                 .input-group.input-group-sm.flex-nowrap
                                     .input-group-prepend
-                                        button#minus.btn.btn-light.disabled(type="button")
+                                        button#minus.btn.btn-light(type="button")
                                             i.fas.fa-minus.md-font
                                     #qty.input-group-text.border-0.rounded-0.bg-white.md-font
                                     .input-group-append
                                         button#plus.btn.btn-light(type="button")
                                             i.fas.fa-plus.md-font
                         .align-self-center.col-2
-                            .d-flex.align-items-center
+                            #priceTag.d-flex.align-items-center
                                 #price.md-font
-                                button.btn.text-success.btn-sm.md-font.p-0(style="display: none")
+                                button#down.btn.text-success.btn-sm.md-font.p-0(style="display: none")
                                     i.fas.fa-long-arrow-alt-down
-                                button.btn.text-danger.btn-sm.md-font.p-0(style="display: none")
+                                button#up.btn.text-danger.btn-sm.md-font.p-0(style="display: none")
                                     i.fas.fa-long-arrow-alt-up
                             #discount.badge.badge-warning.rounded-pill.sm-font.position-absolute
                             #promo.badge.badge-warning.rounded-pill.sm-font.position-absolute
                         .d-flex.col-1.p-1.justify-content-center
-                            i.far.fa-square.align-self-center
+                            i#uncheck.far.fa-square.align-self-center
                             i#check.far.fa-check-square.align-self-center.position-absolute(style="display: none")
                             button#remove.btn.text-dark.btn-sm.p-0.align-self-end.position-absolute
                                 i.fas.fa-trash-alt
-            .modal-footer
+            .modal-footer.p-2
                 .mr-auto
                     #totalPrice.lg-font.text-dark
                     #totalSaving.md-font.text-secondary
-                button.btn.btn-secondary(data-dismiss="modal") Close
+                button.btn.btn-sm.btn-secondary(data-dismiss="modal") Close

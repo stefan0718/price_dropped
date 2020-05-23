@@ -25,7 +25,7 @@ window.addEventListener('load', () => {
             $('#navSearch, #navbarNav').collapse('hide');
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
-            $('#searchResult .card').remove('#active_listColes, #active_listWoolies');
+            $('#searchResult .card').remove('#showing_listColes, #showing_listWoolies');
             $('#searchResult #cardMask').css('opacity', '0');
             fetchFromColes();
             fetchFromWoolies();
@@ -56,13 +56,13 @@ function fetchFromColes() {
                 "itemImage": item.t,
                 "itemBrand": item.m,
                 "itemName": item.n,
-                "itemDollar": Math.floor(item.p1.o),
-                "itemCent": item.p1.o % 1,
+                "itemDollar": item.p1.o * 100 - item.p1.o * 100 % 100,
+                "itemCent": item.p1.o * 100 % 100,
                 "itemSize": item.a.O3[0],
                 "itemPackagePrice": item.u2,
                 "itemPromoQty": itemPromoQty,
-                "itemPromoPrice": parseFloat(itemPromoPrice).toFixed(2) * itemPromoQty,
-                "itemSaving": (item.p1.hasOwnProperty("l4")) ? item.p1.l4 - item.p1.o : 0
+                "itemPromoPrice": parseFloat(itemPromoPrice) * 100 * itemPromoQty,
+                "itemSaving": (item.p1.hasOwnProperty("l4")) ? (item.p1.l4 - item.p1.o) * 100 : 0
             });
         }
         createList(fromColes, $('#listColes'), urlColes);
@@ -97,13 +97,13 @@ function fetchFromWoolies() {
                     "itemImage": item.MediumImageFile,
                     "itemBrand": (item.Brand === null) ? '' : item.Brand.charAt(0).toUpperCase() + item.Brand.slice(1),
                     "itemName": (item.Brand === null) ? item.Name.trim() : item.Name.slice(item.Brand.length).trim(),
-                    "itemDollar": Math.floor(item.Price),
-                    "itemCent": (item.Price % 1),
+                    "itemDollar": item.Price * 100 - item.Price * 100 % 100,
+                    "itemCent": item.Price * 100 % 100,
                     "itemSize": item.PackageSize,
                     "itemPackagePrice": item.CupString,
                     "itemPromoQty": itemPromoQty,
-                    "itemPromoPrice": itemPromoPrice,
-                    "itemSaving": item.WasPrice - item.Price
+                    "itemPromoPrice": itemPromoPrice * 100,
+                    "itemSaving": (item.WasPrice - item.Price) * 100
                 });
             }
         }
@@ -118,7 +118,7 @@ function createList(data, cards, url) {
         var delayTime = 500;
         var altImg = 'https://shop.coles.com.au/wcsstore/ColesResponsiveStorefrontAssetStore/dist/d04b5953359411f41db65cc3fdc06d7d/img/img_product-placeholder.png';
         for (let i = 0; i < data.length; i++) {
-            card.attr('id', 'active_' + cards.attr('id'));
+            card.attr('id', 'showing_' + cards.attr('id'));
             card.find('img').attr({
                 'src': url + data[i].itemImage,
                 'alt': data[i].itemBrand + ' ' + data[i].itemName,
@@ -129,19 +129,19 @@ function createList(data, cards, url) {
             var itemPrice = data[i].itemDollar + data[i].itemCent + data[i].itemSaving;
             card.find('p#wasPrice, #discount, #item-promo').hide();
             if (data[i].itemSaving !== 0) {
-                card.find('p#wasPrice').text('Was $' + itemPrice.toFixed(2));
+                card.find('p#wasPrice').text('Was $' + (itemPrice / 100).toFixed(2));
                 if ($(window).width() >= 992) card.find('p#wasPrice').show();
                 card.find('#discount').text((data[i].itemSaving / itemPrice * 100).toFixed() + '%OFF');
                 card.find('#discount').show();
             }
             else if (data[i].itemPromoQty !== 0) {
-                card.find('p#wasPrice').text('Each for $' + (data[i].itemPromoPrice / data[i].itemPromoQty).toFixed(2));
+                card.find('p#wasPrice').text('Each for $' + (data[i].itemPromoPrice / 100 / data[i].itemPromoQty).toFixed(2));
                 if ($(window).width() >= 992) card.find('p#wasPrice').show();
-                card.find('#item-promo').text(data[i].itemPromoQty + ' for $' + data[i].itemPromoPrice);
+                card.find('#item-promo').text(data[i].itemPromoQty + ' for $' + data[i].itemPromoPrice / 100);
                 card.find('#item-promo').show();
             }
-            card.find('#dollar').text(data[i].itemDollar);
-            card.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent * 100).toFixed(0));
+            card.find('#dollar').text(data[i].itemDollar / 100);
+            card.find('#cent').text((data[i].itemCent === 0) ? '' : (data[i].itemCent).toFixed());
             var currentCard = card.clone().delay(delayTime += 100).fadeTo(400, 1);
             cards.append(currentCard);
             textAutoScroll(currentCard);
@@ -176,7 +176,7 @@ function textAutoScroll(card) {
 
 function titleResponsive(card) {
     var title = card.find('#cardTitle');
-    if (card.attr('id') === 'active_listColes') title.text('Coles').css('background-color', '#de1f27');
+    if (card.attr('id') === 'showing_listColes') title.text('Coles').css('background-color', '#de1f27');
     else title.text('Woolworths').css('background-color', '#178841');
     if ($(window).width() >= 768) title.css('writing-mode', 'vertical-rl').addClass('rounded-left');
     else title.css('writing-mode', 'horizontal-tb').addClass('rounded-top');
@@ -268,6 +268,7 @@ function promptControl() {
     $('#prompt-2 #btnConfirm').unbind();
     $('#prompt-2 #btnConfirm').on('click', () => {
         $('#prompt-2').collapse('hide');
+        $('#prompt-1').collapse('hide');
         storeCards();
     });
 }
@@ -277,7 +278,6 @@ function rechooseCards() {
         'opacity': '0'
     }, 500, 'linear');
     storedData.SKUs.pop();
-    console.log(storedData);
     storedData[storedData.lastAddedFrom].isAdded = false;
     if (storedData.lastAddedFrom === 'Coles' && storedData.Woolies.isAdded) storedData.lastAddedFrom = 'Woolies';
     if (storedData.lastAddedFrom === 'Woolies' && storedData.Coles.isAdded) storedData.lastAddedFrom = 'Coles';
