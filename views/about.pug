@@ -1,0 +1,33 @@
+extends layout
+
+block about
+    .jumbotron.m-4.half-opacity.font-nm
+        h1.font-md About PriceDropped
+        p.lead PriceDropped a free tool that you can compare product prices and add to your shopping list.
+        hr.mt-4.mb-4
+        p We all know Coles and Woolworths privide various discount products including half-prices every week. 
+        p Say I need to buy a pack of dishwashing tablets, and I found one store sells as half price, like this:
+        img.img-fluid.d-md-block.d-none(src="/image/about-md-1.png")
+        img.img-fluid.d-md-none.d-block(src="/image/about-1.png")
+        p
+        p Or some laundry liquid like this:
+        img.img-fluid.d-md-block.d-none(src="/image/about-md-2.png")
+        img.img-fluid.d-md-none.d-block(src="/image/about-2.png")
+        p
+        p By using PriceDropped, you can always check prices of your favourite groceries before adding them to your shopping list.
+        .carousel.slide(data-ride="carousel")
+            .carousel-inner
+                .carousel-item.active
+                    img.img-fluid.d-md-block.d-none(src="/image/about-md-3-1.png")
+                    img.img-fluid.d-md-none.d-block(src="/image/about-3-1.png")
+                .carousel-item
+                    img.img-fluid.d-md-block.d-none(src="/image/about-md-3-2.png")
+                    img.img-fluid.d-md-none.d-block(src="/image/about-3-2.png")
+                .carousel-item
+                    img.img-fluid.d-md-block.d-none(src="/image/about-md-3-3.png")
+                    img.img-fluid.d-md-none.d-block(src="/image/about-3-3.png")
+        hr.mt-4.mb-4
+        .d-flex.flex-column.align-items-center
+            a.h1(href="/") TRY NOW 
+            .h3 And save more than money for your next shopping!
+            footer.blockquote-footer if you don't mind shopping at both stores which are normally close to each other.

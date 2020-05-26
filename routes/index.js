@@ -3,10 +3,10 @@ const puppeteer = require('puppeteer');
 const urlColes = 'https://shop.coles.com.au/online/COLRSSearchDisplay?storeId=20503&catalogId=37101&tabType=everything&searchTerm=';
 
 router.get('/', (req, res) => {
-    res.render('main', {title: 'Compare and Get the Lowest Price'});
+    res.render('main');
 });
 
-router.post('/', (req, res) => {
+router.post('/search', (req, res) => {
     (async () => {
         const browser = await puppeteer.launch();
         const page_coles = await browser.newPage();
@@ -33,6 +33,18 @@ router.post('/', (req, res) => {
         res.send(metadata);
         await browser.close();
     })();
+});
+
+router.get('/about', (req, res) => {
+    res.render('about');
+});
+
+router.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
+router.get('/featured', (req, res) => {
+    res.render('featured');
 });
 
 module.exports = router;

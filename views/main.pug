@@ -1,14 +1,9 @@
 extends layout
 
-block append head
-
-    script(type="text/javascript" src="/js/main.js")
-    script(type="text/javascript" src="/js/popup.js")
-
-block search_result
-
-    #searchResult.d-flex.flex-row.no-gutters.justify-content-center
-        #listColes.col-6.col-lg-5.p-1.pr-md-2
-            include card
-        #listWoolies.col-6.col-lg-5.p-1.pl-md-2
-            include card
+block main
+ 
+    .position-fixed.w-100.h-100.d-flex.flex-column.justify-content-center.align-items-center
+        .d-flex.flex-wrap.text-white.display-4.justify-content-center
+            .p-3 Searching
+            .p-3 Comparing
+            .p-3 Listing

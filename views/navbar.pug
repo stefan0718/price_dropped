@@ -11,11 +11,11 @@
         #navbarNav.collapse.navbar-collapse.ml-3
             .navbar-nav
                 a.nav-item.nav-link.text-dark(href="/") Home
-                a.nav-item.nav-link.text-dark(href="/") Featured
-                a#list.nav-item.nav-link.text-dark.d-flex(type="button" data-toggle="modal" data-target="#popupList") List 
+                a.nav-item.nav-link.text-dark(href="/featured") Featured
+                a#list.nav-item.nav-link.text-dark.d-flex(data-toggle="modal" data-target="#popupList") List 
                     .badge.badge-danger.badge-pill.align-self-center.sm-font
-                a.nav-item.nav-link.text-dark(href="#") About
-                a.nav-item.nav-link.text-dark(href="#") Contact
+                a.nav-item.nav-link.text-dark(href="/about") About
+                a.nav-item.nav-link.text-dark(href="/contact") Contact
         form#navSearch.form-inline.collapse.navbar-collapse.needs-validation(action="." method="POST" novalidate)
             .input-group.bg-white.rounded-pill.ml-auto.w-100.border.border-secondary(style="padding: 1px")
                 input#searchInput.form-control.form-control-sm.border-0.rounded-pill(type="search" name="query" placeholder="Search for a product" aria-label="Search" required)

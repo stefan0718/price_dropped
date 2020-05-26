@@ -63,7 +63,7 @@ function createPopupCard(i) {
     popupCard.find('#itemDesc').text(data.itemBrand + ' ' + data.itemName + ' ' + data.itemSize);
     popupCard.find('#discount, #promo').hide();
     if (data.itemSaving !== 0) {
-        popupCard.find('#discount').text((data.itemSaving / data.itemPrice * 100).toFixed() + '%OFF');
+        popupCard.find('#discount').text((data.itemSaving / (data.itemPrice + data.itemSaving) * 100).toFixed() + '%OFF');
         popupCard.find('#discount').show();
     }
     else if (data.itemPromoQty !== 0) {
@@ -212,6 +212,6 @@ function updateTotalPrice() {
         storedData.totalSaving += item.itemSaving * storedData.qty[i];
         storedData.totalSaving += (item.itemCent + item.itemDollar) * storedData.qty[i] - item.itemPrice;
     }
-    $('#popupList #totalPrice').text('Total: $' + storedData.totalPrice / 100);
-    $('#popupList #totalSaving').text('Total saving: $' + storedData.totalSaving / 100);
+    $('#popupList #totalPrice').text('Total: $' + (storedData.totalPrice / 100).toFixed(2));
+    $('#popupList #totalSaving').text('Total saving: $' + (storedData.totalSaving / 100).toFixed(2));
 }

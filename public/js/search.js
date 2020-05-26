@@ -22,11 +22,13 @@ window.addEventListener('load', () => {
             });
         }
         else {
+            if (location.pathname !== '/') location.href = '/';
             $('#navSearch, #navbarNav').collapse('hide');
             $('.progress').removeClass('invisible');
             $('.progress-bar').css('width', '10%').attr('aria-valuenow', 10);
             $('#searchResult .card').remove('#showing_listColes, #showing_listWoolies');
             $('#searchResult #cardMask').css('opacity', '0');
+            $('.bg-image').animate({'opacity': '0.5'}, 500, 'linear');
             fetchFromColes();
             fetchFromWoolies();
         }
@@ -38,7 +40,7 @@ function fetchFromColes() {
     var urlColes = "https://shop.coles.com.au";
     $.ajax({
         type: 'POST',
-        url: '/',
+        url: '/search',
         data: {
             "query": $('#searchInput')[0].value.trim(),
             "userAgent": navigator.userAgent
