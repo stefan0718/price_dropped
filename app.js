@@ -8,6 +8,6 @@ app.use(express.static('public'));
 
 app.use('/', require('./routes/index'));
 
-const server = app.listen(7180, () => {
+const server = app.listen(80, () => {
     console.log(`Server is running on port ${server.address().port}`);
 })
