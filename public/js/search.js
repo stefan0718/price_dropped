@@ -51,6 +51,7 @@ function fetchFromColes() {
         for (let i = 0; i < data.fromColes.length; i++){
             var item = data.fromColes[i];
             var itemPromoQty = 0, itemPromoPrice = 0;
+            if (isEmptyJson(item.p1)) continue;  // product unavailable
             if (item.hasOwnProperty("pq")) itemPromoQty = item.pq;
             if (item.hasOwnProperty("pr")) itemPromoPrice = item.pr;
             fromColes.push({
