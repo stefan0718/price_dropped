@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 
 router.post('/search', (req, res) => {
     (async () => {
-        const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+        const browser = await puppeteer.launch({args: ['--no-sandbox']});
         const page_coles = await browser.newPage();
         await page_coles.setUserAgent(req.body.userAgent);
         await page_coles.evaluateOnNewDocument(() => {
