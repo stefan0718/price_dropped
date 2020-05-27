@@ -1,5 +1,8 @@
 # PriceDropped
 
+### link: [https://price-dropped.herokuapp.com/](https://price-dropped.herokuapp.com/)
+
+Now responsive for all devices
 
 ## What is PriceDropped?
 
